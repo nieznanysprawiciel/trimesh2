@@ -753,7 +753,17 @@ static bool read_obj(FILE *f, TriMesh *mesh)
 				return false;
 			}
 			mesh->normals.push_back(vec(x,y,z));
-		} else if (LINE_IS("f ") || LINE_IS("f\t") ||
+		} 
+		else if( LINE_IS( "vt " ) )
+		{
+			// Extract texture coordinates and save as colors.
+			float u, v, w = 0.0f;
+			if (sscanf(buf+2, "%f %f %f", &u, &v, &w) < 2) {
+				return false;
+			}
+			mesh->colors.push_back(vec(u,v,w));
+		}
+		else if (LINE_IS("f ") || LINE_IS("f\t") ||
 			   LINE_IS("t ") || LINE_IS("t\t")) {
 			thisface.clear();
 			char *c = buf;
