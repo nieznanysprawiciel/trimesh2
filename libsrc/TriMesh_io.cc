@@ -735,6 +735,8 @@ static bool read_ray(FILE *f, TriMesh *mesh)
 static bool read_obj(FILE *f, TriMesh *mesh)
 {
 	vector<int> thisface;
+	vector< vec3 > uvs;
+
 	while (1) {
 		skip_comments(f);
 		if (feof(f))
@@ -756,32 +758,58 @@ static bool read_obj(FILE *f, TriMesh *mesh)
 		} 
 		else if( LINE_IS( "vt " ) )
 		{
-			// Extract texture coordinates and save as colors.
+			// Extract texture coordinates and save to temporary buffer.
 			float u, v, w = 0.0f;
-			if (sscanf(buf+2, "%f %f %f", &u, &v, &w) < 2) {
+			if( sscanf( buf + 2, "%f %f %f", &u, &v, &w ) < 2 )
 				return false;
-			}
-			mesh->colors.push_back(vec(u,v,w));
+			
+			uvs.push_back( vec( u, v, w ) );
 		}
-		else if (LINE_IS("f ") || LINE_IS("f\t") ||
-			   LINE_IS("t ") || LINE_IS("t\t")) {
-			thisface.clear();
-			char *c = buf;
-			while (1) {
-				while (*c && *c != '\n' && !isspace(*c))
-					c++;
-				while (*c && isspace(*c))
-					c++;
-				int thisf;
-				if (sscanf(c, " %d", &thisf) != 1)
-					break;
-				if (thisf < 0)
-					thisf += mesh->vertices.size();
-				else
-					thisf--;
-				thisface.push_back(thisf);
+		else if( LINE_IS( "f " ) || LINE_IS( "f\t" ) ||
+				 LINE_IS( "t " ) || LINE_IS( "t\t" ) )
+		{
+			// When we are here for the first time, all verticies should be read.
+			static bool first = true;
+			if( first )
+			{
+				mesh->colors.resize( mesh->vertices.size() );
+				first = false;
 			}
-			tess(mesh->vertices, thisface, mesh->faces);
+
+			thisface.clear();
+
+			char *c = buf;
+			while( 1 )
+			{
+				while( *c && *c != '\n' && !isspace( *c ) )
+					c++;
+				while( *c && isspace( *c ) )
+					c++;
+
+				int thisFace;
+				int thisUV;
+
+				auto numAttribs = sscanf( c, " %d/%d", &thisFace, &thisUV );
+
+				if( numAttribs < 1 || numAttribs > 3 )
+					break;
+
+				if( thisFace < 0 )
+					thisFace += mesh->vertices.size();
+				else
+					thisFace--;
+
+				thisface.push_back( thisFace );
+
+				if( numAttribs == 2 )
+				{
+					// This code assumes that each vertex has only one UV coordinate.
+					// Place uvs on positions coresponding to vertex.
+					mesh->colors[ thisFace ] = uvs[ thisUV ];
+				}
+			}
+
+			tess( mesh->vertices, thisface, mesh->faces );
 		}
 	}
 
