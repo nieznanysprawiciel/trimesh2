@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{7505125B-55D8-492A-8734-8341CF65354E}</ProjectGuid>
-    <RootNamespace>mesh_align</RootNamespace>
+    <ProjectGuid>{00AF901B-559C-44FF-B1E0-38AA3802DAC7}</ProjectGuid>
+    <RootNamespace>mesh_cat</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -134,7 +134,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\utilsrc\mesh_align.cc" />
+    <ClCompile Include="..\..\..\utilsrc\mesh_cat.cc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

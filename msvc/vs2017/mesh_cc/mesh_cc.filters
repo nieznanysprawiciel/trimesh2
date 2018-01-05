@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\utilsrc\mesh_align.cc">
+    <ClCompile Include="..\..\..\utilsrc\mesh_cc.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

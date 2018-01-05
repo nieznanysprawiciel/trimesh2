@@ -1,5 +1,4 @@
-#ifndef ICP_H
-#define ICP_H
+#pragma once
 /*
 Szymon Rusinkiewicz
 Princeton University
@@ -11,6 +10,7 @@ Routines for doing ICP.
 #include "TriMesh.h"
 #include "XForm.h"
 #include "KDtree.h"
+#include "timestamp.h"
 
 
 namespace trimesh {
@@ -40,5 +40,3 @@ extern float ICP(TriMesh *s1, TriMesh *s2, const xform &xf1, xform &xf2,
 		 bool do_scale = false, bool do_affine = false);
 
 }; // namespace trimesh
-
-#endif
