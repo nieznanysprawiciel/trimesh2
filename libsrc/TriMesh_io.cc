@@ -805,7 +805,7 @@ static bool read_obj(FILE *f, TriMesh *mesh)
 				{
 					// This code assumes that each vertex has only one UV coordinate.
 					// Place uvs on positions coresponding to vertex.
-					mesh->colors[ thisFace ] = uvs[ thisUV ];
+					mesh->colors[ thisFace ] = uvs[ thisUV - 1 ];
 				}
 			}
 
